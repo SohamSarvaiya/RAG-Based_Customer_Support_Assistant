@@ -1,0 +1,16 @@
+[
+  {"question": "What is your refund policy?", "keywords": ["30 days", "refund"], "answerable": true, "page": 1},
+  {"question": "How long does it take to receive my refund?", "keywords": ["5 to 7 business days"], "answerable": true, "page": 1},
+  {"question": "Can I get a refund on gift cards?", "keywords": ["non-refundable"], "answerable": true, "page": 1},
+  {"question": "How long is the product warranty?", "keywords": ["2-year"], "answerable": true, "page": 2},
+  {"question": "Does the warranty cover water damage?", "keywords": ["does not cover", "water damage"], "answerable": true, "page": 2},
+  {"question": "What documents are required for registration?", "keywords": ["photo ID", "invoice", "serial number"], "answerable": true, "page": 3},
+  {"question": "What extra document do business customers need to register?", "keywords": ["GST"], "answerable": true, "page": 3},
+  {"question": "My device will not power on, what should I do?", "keywords": ["15 seconds"], "answerable": true, "page": 4},
+  {"question": "Wi-Fi keeps dropping, how do I fix it?", "keywords": ["restart the router"], "answerable": true, "page": 4},
+  {"question": "How do I factory reset the device?", "keywords": ["reset pin"], "answerable": true, "page": 4},
+  {"question": "Who won the football world cup in 2022?", "answerable": false},
+  {"question": "What is the capital of France?", "answerable": false},
+  {"question": "Do you offer student discounts on laptops?", "answerable": false},
+  {"question": "Write me a poem about the ocean", "answerable": false}
+]

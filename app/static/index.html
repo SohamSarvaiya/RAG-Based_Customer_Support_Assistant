@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Support Assistant (RAG demo)</title>
+<style>
+ body{font-family:system-ui,sans-serif;max-width:760px;margin:2rem auto;padding:0 1rem;color:#1a1a1a}
+ h1{font-size:1.4rem} section{border:1px solid #ddd;border-radius:10px;padding:1rem;margin:1rem 0}
+ input,button{font:inherit;padding:.5rem .7rem;border-radius:6px;border:1px solid #bbb}
+ input[type=text]{width:100%;box-sizing:border-box;margin:.3rem 0} button{background:#1a56db;color:#fff;border:0;cursor:pointer}
+ .src{background:#f5f7fa;border-left:3px solid #1a56db;padding:.5rem .7rem;margin:.5rem 0;font-size:.9rem}
+ .warn{color:#b45309}.muted{color:#666;font-size:.85rem}
+</style></head><body>
+<h1>AI Customer Support Assistant</h1>
+<section><label>API key</label><input id="key" type="text" placeholder="X-API-Key"></section>
+<section><b>1. Upload PDF</b><br><input id="file" type="file" accept=".pdf"> <button onclick="upload()">Upload</button>
+<div id="up" class="muted"></div></section>
+<section><b>2. Ask a question</b>
+<input id="q" type="text" placeholder="What is your refund policy?" onkeydown="if(event.key==='Enter')ask()">
+<button onclick="ask()">Ask</button><div id="ans"></div></section>
+<script>
+const h=()=>({'X-API-Key':document.getElementById('key').value});
+const esc=s=>s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+async function upload(){
+ const f=document.getElementById('file').files[0]; if(!f)return;
+ const fd=new FormData(); fd.append('file',f);
+ const r=await fetch('/documents',{method:'POST',headers:h(),body:fd}); const j=await r.json();
+ document.getElementById('up').textContent=r.ok?`${j.status}: ${j.filename} (${j.chunks} chunks)`:'Error: '+j.detail;}
+async function ask(){
+ const q=document.getElementById('q').value; const out=document.getElementById('ans'); out.textContent='Thinking...';
+ const r=await fetch('/ask',{method:'POST',headers:{...h(),'Content-Type':'application/json'},body:JSON.stringify({question:q})});
+ const j=await r.json(); if(!r.ok){out.innerHTML='<p class="warn">'+esc(j.detail||'Error')+'</p>';return;}
+ let html=`<p class="${j.grounded?'':'warn'}">${esc(j.answer)}</p>`;
+ j.sources.forEach(s=>{html+=`<div class="src"><b>[${s.id}] ${esc(s.filename)} - page ${s.page}</b> <span class="muted">(similarity ${s.score})</span><br>${esc(s.snippet)}...</div>`});
+ out.innerHTML=html+`<div class="muted">${j.latency_ms} ms</div>`;}
+</script></body></html>
